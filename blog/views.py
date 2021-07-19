@@ -1,22 +1,20 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import CreateView, ListView
+from django.shortcuts import render
+from django.views.generic import CreateView, ListView, UpdateView
 
-from blog.forms import RegisterForm, CommentForm
+from blog.forms import RegisterForm
 from django.views import generic
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, get_user_model
 
-from blog.models import Post, Comment
+from blog.models import Blog
 
 User = get_user_model()
 
 
 def index(request):
-    """View function for home page of site."""
-
     return render(request, 'index.html')
 
 
@@ -36,11 +34,42 @@ class RegisterFormView(generic.FormView):
         return super(RegisterFormView, self).form_valid(form)
 
 
+class UpdateProfile(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = User
+    fields = ['first_name', 'last_name', 'email']
+    template_name = 'registration/update_profile.html'
+    success_url = reverse_lazy('blogs:index')
+    success_message = 'Profile updated'
+
+    def get_object(self, queryset=None):
+        user = self.request.user
+        return user
+
+
+class BlogListView(generic.ListView):
+    model = Blog
+    paginate_by = 5
+    template_name = 'blogs.html'
+
+
+class BlogDetailView(generic.DetailView):
+    model = Blog
+
+
+class BloggerListView(ListView):
+    model = User
+    template_name = 'bloggers.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return User.objects.filter(is_staff=False)
+
+
 class PostCreate(LoginRequiredMixin, CreateView):
-    model = Post
+    model = Blog
     fields = ['title', 'short_description', 'full_description', 'posted']
-    template_name = 'post_create.html'
-    success_url = reverse_lazy('blog:post-list')
+    template_name = 'blog_create.html'
+    success_url = reverse_lazy('blog:blogs')
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -48,41 +77,3 @@ class PostCreate(LoginRequiredMixin, CreateView):
         post.save()
         self.object = post
         return HttpResponseRedirect(self.get_success_url())
-
-
-class PostList(ListView):
-    model = Post
-    paginate_by = 10
-    template_name = 'post_list.html'
-
-
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk, posted=True)
-    comments = Comment.objects.all().filter(post=post).filter(moderated=True)
-    paginator = Paginator(comments, 2)
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    if request.method == 'POST':
-
-        form = CommentForm(request.POST)
-
-        if form.is_valid():
-            comm = Comment()
-            comm.username = form.cleaned_data['username']
-            comm.text = form.cleaned_data['text']
-            comm.post = post
-            comm.save()
-            return HttpResponseRedirect(reverse('post-detail', args=(post.id,)))
-
-    else:
-        initial = {'username': request.user.username}
-        form = CommentForm(initial=initial)
-
-    context = {
-        'form': form,
-        'post': post,
-        'page_obj': page_obj,
-    }
-
-    return render(request, 'post_detail.html', context)

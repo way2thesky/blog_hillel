@@ -21,7 +21,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
-# Blog
+# Hillel_Blog
 urlpatterns += [
     path('', RedirectView.as_view(url='/blog/', permanent=True)),
     path('blog/', include('blog.urls')),
