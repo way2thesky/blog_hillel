@@ -7,17 +7,17 @@ app_name = 'blog'
 urlpatterns = [
     path('', views.index, name='index'),
 
-    path('blogs/', views.BlogListView.as_view(), name='blogs'),
-    path('blogs/create/', views.PostCreate.as_view(), name='blog-create'),
-    path('blog/<int:pk>', views.BlogDetailView.as_view(), name='blog-detail'),
+    path('posts/', views.PostListView.as_view(), name='post-list'),
+    path('post/create/', views.PostCreate.as_view(), name='post-create'),
+    path('post/<int:pk>', views.PostDetail.as_view(), name='post-detail'),
 
-    # path('blogs/update/<int:pk>/', views.PostUpdate.as_view(), name='blog-update'),
-    # path('blogs/delete/<int:pk>/', views.PostDelete.as_view(), name='blog-delete'),
+    # path('blogs/update/<int:pk>/', views.PostUpdate.as_view(), name='post-update'),
+    # path('blogs/delete/<int:pk>/', views.PostDelete.as_view(), name='post-delete'),
 
-    path('bloggers/', views.BloggerListView.as_view(), name='bloggers'),
-    # path('blogger/<int:pk>', views.BlogListbyAuthorView.as_view(), name='blogger-detail'),
+    path('authors/', views.AuthorListView.as_view(), name='author-list'),
+    path('author/<int:pk>', views.BlogListbyAuthorView.as_view(), name='author-detail'),
 
-    # path('my-blogs/', views.blogger_posts, name='blogger-posts'),
+    # path('my-blogs/', views.blogger_posts, name='author-posts'),
     # path('blog/<int:pk>/comment/', views.BlogCommentCreate.as_view(), name='blog-comment'),
     #
     # path('feedback', views.feedback_form, name="feedback"),

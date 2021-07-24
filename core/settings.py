@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'blog.apps.BlogConfig',
     'django_extensions',
+    'taggit',
 ]
 
 MIDDLEWARE = [

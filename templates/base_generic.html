@@ -22,8 +22,9 @@
             {% block sidebar %}
                 <ul class="sidebar-nav">
                     <li><a href="{% url 'blog:index' %}">Home</a></li>
-                    <li><a href="{% url 'blog:blogs' %}">All blogs</a></li>
-                    <li><a href="{% url 'blog:bloggers' %}">All bloggers</a></li>
+                    <li><a href="{% url 'blog:post-list' %}">All Posts</a></li>
+                    <li><a href="{% url 'blog:author-list' %}">All Authors</a></li>
+                    <li><a href="{% url 'blog:post-create' %}">Home</a></li>
                 </ul>
 
                 <ul class="sidebar-nav">
