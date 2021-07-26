@@ -4,11 +4,15 @@
     <h1>Blogger: {{users}}</h1>
 
     <h3>Bio</h3>
-{% if obj.first_name and obj.last_name %}
-<h5>First name: {{ obj.first_name }}</h5>
-<h5>Last name: {{ obj.last_name }}</h5>
-
-
+{% if users.first_name and users.last_name %}
+<h5>First name: {{ users.first_name }}</h5>
+<h5>Last name: {{ users.last_name }}</h5>
+{% endif %}
+                {% if user.is_authenticated %}
+                                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"
+                       href="{% url 'update-profile' %}">Update Profile</a>
+                </li>
 {% endif %}
 
     <h3>Blogs list</h3>

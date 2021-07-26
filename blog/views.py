@@ -138,6 +138,7 @@ class UserDetailView(generic.ListView):
     model = Blog
     paginate_by = 5
     template_name = 'user_detail.html'
+    success_message = 'Profile Updated'
 
     def get_queryset(self):
         id = self.kwargs['pk']  # noqa A001
@@ -184,12 +185,12 @@ def contact(request):
             mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'yii2_loc@ukr.net',
                              ['matroskin978@gmail.com'], fail_silently=True)
             if mail:
-                messages.success(request, 'Письмо отправлено!')
+                messages.success(request, 'Successful! Sent')
                 return redirect('blog:index')
             else:
-                messages.error(request, 'Ошибка отправки')
+                messages.error(request, 'Some Errors')
         else:
-            messages.error(request, 'Ошибка валидации')
+            messages.error(request, 'Some Error with validation')
     else:
         form = ContactForm()
     return render(request, 'contact_form.html', {"form": form})
