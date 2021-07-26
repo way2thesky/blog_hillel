@@ -25,7 +25,7 @@ class BlogCommentInlineModelAdmin(admin.TabularInline):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title','publish','posted')
+    list_display = ('user', 'title', 'publish', 'posted')
     fields = ['title', 'short_description', 'image', 'user', 'full_description', 'status', 'posted', 'publish']
     inlines = [BlogCommentInlineModelAdmin]
     list_filter = ('posted', 'publish', 'user')
