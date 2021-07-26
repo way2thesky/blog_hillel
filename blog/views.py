@@ -1,19 +1,17 @@
+from blog.forms import CommentForm, ContactForm, RegisterForm
+from blog.models import Blog, BlogComment
+
 from django.contrib import messages
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import CreateView, DetailView, FormView, ListView, UpdateView
-
-from blog.forms import CommentForm, ContactForm, RegisterForm
-
+from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.urls import reverse_lazy, reverse
-from django.contrib.auth import authenticate, get_user_model, login
-
-from blog.models import Blog, BlogComment
+from django.views.generic import CreateView, DetailView, FormView, ListView, UpdateView
 
 User = get_user_model()
 
@@ -124,7 +122,7 @@ class UserDetailView(generic.ListView):
     template_name = 'user_detail.html'
 
     def get_queryset(self):
-        id = self.kwargs['pk']  # A001
+        id = self.kwargs['pk']  # noqa A001
         target_user = get_object_or_404(User, pk=id)
         return Blog.objects.filter(user=target_user)
 

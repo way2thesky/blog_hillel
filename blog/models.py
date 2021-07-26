@@ -1,6 +1,7 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils import timezone
+
 from taggit.managers import TaggableManager
 
 
@@ -17,7 +18,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=200)
     short_description = models.SlugField(max_length=250, unique_for_date='publish')
 
-    image = models.ImageField(upload_to='featured_image/%Y/%m/%d/', blank=True, null=True)
+    image = models.ImageField(upload_to='featured_image/%Y/%m/%d/', blank=True, null=True) # noqa DJ01
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
