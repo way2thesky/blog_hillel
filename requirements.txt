@@ -9,7 +9,6 @@ django-simple-captcha==0.5.14
 django-taggit==1.5.1
 Faker==8.10.2
 Pillow==8.3.1
-pkg-resources==0.0.0
 pydot==1.4.2
 pygraphviz==1.7
 pyparsing==2.4.7
