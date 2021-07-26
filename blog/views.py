@@ -10,8 +10,11 @@ from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import generic
-from django.views.generic import CreateView, DetailView, FormView, ListView, UpdateView
+from django.views.decorators.cache import cache_page
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
+
 
 User = get_user_model()
 
@@ -65,6 +68,21 @@ class PostCreate(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Blog
+    fields = ['title', 'short_description', 'image', 'full_description', 'posted']
+    success_url = reverse_lazy('blog:post-list')
+    template_name = 'post_update_page.html'
+    login_url = reverse_lazy('login')
+
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = reverse_lazy('blog:index')
+    model = Blog
+    success_url = reverse_lazy('blog:post-list')
+
+
+@method_decorator(cache_page(20), name='dispatch')
 class PostListView(generic.ListView):
     model = Blog
     paginate_by = 5

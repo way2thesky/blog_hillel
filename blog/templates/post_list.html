@@ -5,13 +5,13 @@
     <h3>Blogs:</h3>
     <ul>
         {% for post in page_obj %}
-    <figure>
-        <img alt="Qries" src="{{ post.image }}" width="30%">
-    </figure>
+        <figure>
+            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% endif %}" class="rounded" alt="">
+        </figure>
             <h2 class="card-title h5">
                 {{ post.title }}
             </h2>
-            <h5>Short description: {{ post.full_description }} </h5>
+            <h5>Short description: {{ post.short_description }} </h5>
             <div class="text-muted">
                 <small>
                     Published {{ post.publish.date }} by <strong>{{ post.user }}</strong>
