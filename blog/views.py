@@ -1,3 +1,4 @@
+
 from blog.forms import CommentForm, ContactForm, RegisterForm
 from blog.models import Blog, BlogComment
 
@@ -6,7 +7,6 @@ from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
-from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -14,7 +14,6 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
-
 
 User = get_user_model()
 
@@ -58,12 +57,17 @@ class PostCreate(LoginRequiredMixin, CreateView):
     fields = ['title', 'short_description', 'image', 'full_description', 'posted']
     template_name = 'post_create.html'
     success_url = reverse_lazy('blog:post-list')
-    success_message = 'Post created'
 
     def form_valid(self, form):
         post = form.save(commit=False)
         post.user = self.request.user
         post.save()
+        if form.is_valid():
+            subject = 'New post'
+            message = 'New post created! Check it on admin panel.'
+            from_email = 'matroskin@gmail.com'
+            send_mail(subject, message, from_email, ['admin@example.com'])
+
         self.object = post
         return HttpResponseRedirect(self.get_success_url())
 
@@ -80,6 +84,7 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     login_url = reverse_lazy('blog:index')
     model = Blog
     success_url = reverse_lazy('blog:post-list')
+    template_name = 'post_delete_page.html'
 
 
 @method_decorator(cache_page(20), name='dispatch')
@@ -87,6 +92,8 @@ class PostListView(generic.ListView):
     model = Blog
     paginate_by = 5
     template_name = 'post_list.html'
+    queryset = Blog.objects.all()
+    context_object_name = 'posts'
 
     def get_queryset(self):
         return Blog.objects.all().filter(posted=True)
@@ -107,21 +114,19 @@ def post_detail(request, pk):
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
+            mail = send_mail(comment_form.cleaned_data['name'], comment_form.cleaned_data['email'], 'yii2_loc@ukr.net',
+                             ['matroskin978@gmail.com'], fail_silently=True)
+            if mail:
+                messages.success(request, 'Successful! Sent')
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
             new_comment.save()
-            messages.success(request, 'Comment sent')
             return HttpResponseRedirect(reverse('blog:post-detail', args=(post.id,)))
     else:
         comment_form = CommentForm()
 
-    # List of similar posts
-    post_tags_ids = post.tags.values_list('id', flat=True)
-    similar_posts = Blog.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
-    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:6]
-
     return render(request, 'post_detail.html',
-                  {'post': post, 'comments': comments, 'comment_form': comment_form, 'similar_posts': similar_posts})
+                  {'post': post, 'comments': comments, 'comment_form': comment_form})
 
 
 class UserListView(ListView):
@@ -156,8 +161,6 @@ def reply_page(request):
 
         form = CommentForm(request.POST)
 
-        # print(form)
-
         if form.is_valid():
             post_id = request.POST.get('post_id')  # from hidden input
             parent_id = request.POST.get('parent')  # from hidden input
@@ -182,8 +185,8 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'yii2_loc@ukr.net',
-                             ['matroskin978@gmail.com'], fail_silently=True)
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'admin@example.com',
+                             ['matroskin@gmail.com'], fail_silently=True)
             if mail:
                 messages.success(request, 'Successful! Sent')
                 return redirect('blog:index')

@@ -37,7 +37,8 @@ urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
     path("accounts/register/", RegisterFormView.as_view(), name="register"),
     path('accounts/update-profile/', UpdateProfile.as_view(), name='update-profile'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

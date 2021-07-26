@@ -6,7 +6,7 @@
     <ul>
         {% for post in page_obj %}
         <figure>
-            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% endif %}" class="rounded" alt="">
+            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% endif %}" class="img-thumbnail" alt="...">
         </figure>
             <h2 class="card-title h5">
                 {{ post.title }}

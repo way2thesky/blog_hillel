@@ -29,7 +29,7 @@ class Blog(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
 
     class Meta:
-        ordering = ('-publish',)
+        ordering = ['-publish']
 
     def __str__(self):
         return self.title

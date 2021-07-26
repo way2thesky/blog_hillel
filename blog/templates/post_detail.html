@@ -7,8 +7,7 @@
     <article>
         <figure>
 
-            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% endif %}" class="rounded"
-                 alt="{{ post.title }}">
+            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% endif %}" class="img-thumbnail" alt="...">
         </figure>
 
         <div class="mt-3">
@@ -24,19 +23,16 @@
         </div>
 
 
-                 <a class="nav-link active"
-                       href="update
-                       /{{ post.id }}">Update Post</a>
+        <a class="nav-link active"
+           href="update/{{ post.id }}">Update Post</a>
 
-                <a class="nav-link active"
-                       href="delete/{{ post.id }}">Delete Post</a>
+        <a class="nav-link active"
+           href="delete/{{ post.id }}">Delete Post</a>
 
 
     </article>
 
-    <hr/>
 
-    <hr/>
     <h3>Add Comment</h3>
     <form method="post" action="">
         {% csrf_token %}
