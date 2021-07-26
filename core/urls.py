@@ -13,9 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+from blog.views import RegisterFormView, UpdateProfile
+
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
+
 from django.urls import include, path
-from blog.views import RegisterFormView
+
 from django.views.generic import RedirectView
 
 urlpatterns = [
@@ -25,8 +32,15 @@ urlpatterns = [
 urlpatterns += [
     path('', RedirectView.as_view(url='/blog/', permanent=True)),
     path('blog/', include('blog.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('captcha/', include('captcha.urls')),
+
 ]
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
     path("accounts/register/", RegisterFormView.as_view(), name="register"),
+    path('accounts/update-profile/', UpdateProfile.as_view(), name='update-profile'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

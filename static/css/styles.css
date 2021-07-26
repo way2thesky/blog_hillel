@@ -1,13 +1,14 @@
-.sidebar-nav {
-    margin-top: 20px;
-    padding: 0;
-    list-style: none;
+.container{
+    max-width: 768px;
+    width: 100%;
 }
-li a {
-    color: darkred;
+
+article img{
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: .25rem!important;
 }
-body{
-    background-image: url("images/background.jpg");
-     color: darkblue;
-     font-family: 'Sigmar One', cursive;
-     }
+
+.featured-image-list{
+    object-fit: cover;
+}
