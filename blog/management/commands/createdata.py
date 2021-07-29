@@ -1,5 +1,7 @@
-from blog.models import Blog, BlogComment
 import datetime
+
+from blog.models import Blog, Comment
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.core.management.base import BaseCommand
@@ -7,12 +9,11 @@ from django.core.management.base import BaseCommand
 from faker import Faker
 from faker.generator import random
 
-
 UserModel = get_user_model()
 fake = Faker(['en_US'])
 
-post_num = 1
-comments_num = 5
+post_num = 100
+comments_num = 500
 
 
 class Command(BaseCommand):
@@ -42,15 +43,15 @@ class Command(BaseCommand):
         Blog.objects.bulk_create(blog)
 
         post_ids = Blog.objects.values_list("id", flat=True)
-        comments = [BlogComment(
+        comments = [Comment(
             name=fake.first_name(),
             email=fake.email(),
             post_id=random.choice(post_ids),
             text=fake.paragraph(nb_sentences=1),
-            parent_id=random.randint(1, 2),
-            created = datetime.date.today() + datetime.timedelta(weeks=3),
+            # parent_id=random.randint(1, 10),
+            created=datetime.date.today(),
 
             active=random.choice([True, False]))
             for _ in range(1, comments_num + 1)]
-        BlogComment.objects.bulk_create(comments)
+        Comment.objects.bulk_create(comments)
         print('Successfully added')  # noqa T001

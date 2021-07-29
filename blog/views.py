@@ -1,7 +1,7 @@
-from django.conf import settings
-
 from blog.forms import CommentForm, ContactForm, RegisterForm
-from blog.models import Blog, BlogComment
+from blog.models import Blog, Comment
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,7 +13,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.cache import cache_page
-from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, FormView, ListView, UpdateView
 
 User = get_user_model()
 
@@ -174,7 +174,7 @@ def reply_page(request):
             reply = form.save(commit=False)
 
             reply.post = Blog(id=post_id)
-            reply.parent = BlogComment(id=parent_id)
+            reply.parent = Comment(id=parent_id)
             reply.save()
 
             return HttpResponseRedirect(reverse('blog:post-detail', args=(post_id,)))

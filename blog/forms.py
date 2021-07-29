@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import BlogComment
+from .models import Comment
 
 
 class RegisterForm(UserCreationForm):
@@ -17,7 +17,7 @@ class RegisterForm(UserCreationForm):
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = BlogComment
+        model = Comment
         fields = ('name', 'email', 'text')
 
     def __init__(self, *args, **kwargs):

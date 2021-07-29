@@ -26,7 +26,7 @@ class Blog(models.Model):
         return self.comments.filter(parent=None).filter(active=True)
 
 
-class BlogComment(models.Model):
+class Comment(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField()
 
@@ -44,4 +44,4 @@ class BlogComment(models.Model):
         return self.name
 
     def get_comments(self):
-        return BlogComment.objects.filter(parent=self).filter(active=True)
+        return Comment.objects.filter(parent=self).filter(active=True)
