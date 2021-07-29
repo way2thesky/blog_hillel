@@ -84,13 +84,15 @@
                     <a class="nav-link active" href="{% url 'blog:contact' %}">Contact
                         US</a>
                 </li>
-            <li class="nav-item">
-                     <a class="nav-link active" href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
 
                 </li>
 
 
                 {% if user.is_authenticated %}
+                    <li>User: {{ user.get_username }}</li>
                     <a class="nav-link active" aria-current="page"
                        href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
 

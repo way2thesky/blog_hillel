@@ -7,17 +7,17 @@ class Blog(models.Model):
     title = models.CharField(max_length=200)
     short_description = models.CharField(max_length=250, unique_for_date='publish')
 
-    image = models.ImageField(upload_to='featured_image/%Y/%m/%d/', blank=True, null=True)  # noqa DJ01
+    image = models.ImageField(blank=True, null=True)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     full_description = models.TextField(blank=True)
-
+    rating = models.DecimalField(max_digits=3, decimal_places=2, default=5)
     posted = models.BooleanField(default=False)
     publish = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ['-posted']
+        ordering = ['-publish']
 
     def __str__(self):
         return self.title

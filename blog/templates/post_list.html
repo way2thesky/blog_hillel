@@ -3,6 +3,7 @@
 {% block content %}
 
     <h3>Blogs:</h3>
+    <strong>Average rating{{ average.rating}}</strong>
     <ul>
         {% for post in page_obj %}
         <figure>
@@ -12,10 +13,14 @@
                 Post Title: {{ post.title }}
             </h2>
             <h5>Short description: {{ post.short_description }} </h5>
+
+
+
             <div class="text-muted">
-                <small>
+                <small>Rating {{ post.rating }}
                     Published {{ post.publish.date }} by <strong>{{ post.user }}</strong>
                 </small>
+
             <h5>Author: <a href="{% url 'blog:user-detail' post.user.id %}" >{{ post.user }}</a></h5>
             </div>
             <div>

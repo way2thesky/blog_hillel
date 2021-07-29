@@ -1,5 +1,9 @@
+
+
+from blog import models
 from blog.forms import CommentForm, ContactForm, RegisterForm
 from blog.models import Blog, Comment
+
 
 from django.conf import settings
 from django.contrib import messages
@@ -7,6 +11,7 @@ from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
+from django.db.models import Avg
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -99,11 +104,15 @@ class PostListView(generic.ListView):
     model = Blog
     paginate_by = 5
     template_name = 'post_list.html'
-    queryset = Blog.objects.all()
     context_object_name = 'posts'
 
     def get_queryset(self):
         return Blog.objects.all().filter(posted=True)
+
+
+def current_average():
+    average = models.Blog.objects.aggregate(average=Avg('rating'))
+    return average
 
 
 def post_detail(request, pk):

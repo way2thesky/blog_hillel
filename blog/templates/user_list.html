@@ -5,7 +5,8 @@
 <h3>Users:</h3>
 <ul>
 {% for user in page_obj %}
-    <h4>User: <a href="{% url 'blog:user-detail' user.pk %}">{{ user.username }}</a> </h4>
+    <span class="badge badge-primary badge-pill"> annotate: count author {{ post.num_authors }}</span>
+    <h4>User: <a href="{% url 'blog:user-detail' user.pk %}">{{ user.username }} </a> </h4>
 {% empty %}
     <li>No users yet.</li>
 {% endfor %}

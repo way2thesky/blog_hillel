@@ -37,7 +37,8 @@ class Command(BaseCommand):
             image=fake.image_url(),
             full_description=fake.paragraph(nb_sentences=50, variable_nb_sentences=False),
             user_id=random.randint(1, 2),
-            posted=random.choice([True, False]))
+            posted=random.choice([True, False]),
+            rating=round(random.uniform(1, 5), 2))
             for _ in range(1, post_num + 1)]
 
         Blog.objects.bulk_create(blog)
