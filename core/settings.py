@@ -24,8 +24,13 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", 'django-insecure-p%nn6-hn2w^t()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "localhost",
+    '127.0.0.1',
+]
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,7 +48,10 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'captcha',
 ]
-
+if DEBUG:
+    INSTALLED_APPS += [
+        'debug_toolbar',
+    ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -53,7 +61,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+if DEBUG:
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [

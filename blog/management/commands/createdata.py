@@ -12,8 +12,8 @@ from faker.generator import random
 UserModel = get_user_model()
 fake = Faker(['en_US'])
 
-post_num = 100
-comments_num = 500
+post_num = 50
+comments_num = 1500
 
 
 class Command(BaseCommand):
