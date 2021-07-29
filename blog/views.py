@@ -1,7 +1,7 @@
+from django.conf import settings
 
 from blog.forms import CommentForm, ContactForm, RegisterForm
 from blog.models import Blog, BlogComment
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -35,6 +35,11 @@ class RegisterFormView(SuccessMessageMixin, FormView):
         password = self.request.POST['password1']
         user = authenticate(username=username, password=password)
         login(self.request, user)
+        subject = 'Welcome to my BLOG'
+        message = f'Hi {username}, thank you for registering in my Blog.'
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email, ]
+        send_mail(subject, message, from_email, recipient_list)
         return super(RegisterFormView, self).form_valid(form)
 
 
@@ -57,6 +62,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
     fields = ['title', 'short_description', 'image', 'full_description', 'posted']
     template_name = 'post_create.html'
     success_url = reverse_lazy('blog:post-list')
+    success_message = 'Post created'
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -64,9 +70,10 @@ class PostCreate(LoginRequiredMixin, CreateView):
         post.save()
         if form.is_valid():
             subject = 'New post'
-            message = 'New post created! Check it on admin panel.'
-            from_email = 'matroskin@gmail.com'
-            send_mail(subject, message, from_email, ['admin@example.com'])
+            message = f'New {post} created! Check it on admin panel.'
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [post.title, ]
+            send_mail(subject, message, from_email, recipient_list)
 
         self.object = post
         return HttpResponseRedirect(self.get_success_url())
@@ -97,12 +104,6 @@ class PostListView(generic.ListView):
 
     def get_queryset(self):
         return Blog.objects.all().filter(posted=True)
-
-
-class PostDetail(DetailView):
-    model = Blog
-    context_object_name = "post"
-    template_name = "post_detail.html"
 
 
 def post_detail(request, pk):

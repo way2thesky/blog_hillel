@@ -2,23 +2,12 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-from taggit.managers import TaggableManager
-
-
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super(PublishedManager, self).get_queryset().filter(status='published')
-
 
 class Blog(models.Model):
-    STATUS_CHOICES = (
-        ('draft', 'Draft'),
-        ('published', 'Published'),
-    )
     title = models.CharField(max_length=200)
     short_description = models.CharField(max_length=250, unique_for_date='publish')
 
-    image = models.ImageField(upload_to='featured_image/%Y/%m/%d/', blank=True, null=True) # noqa DJ01
+    image = models.ImageField(upload_to='featured_image/%Y/%m/%d/', blank=True, null=True)  # noqa DJ01
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -26,18 +15,12 @@ class Blog(models.Model):
 
     posted = models.BooleanField(default=False)
     publish = models.DateTimeField(default=timezone.now)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
 
     class Meta:
-        ordering = ['-publish']
+        ordering = ['-posted']
 
     def __str__(self):
         return self.title
-
-    objects = models.Manager()  # The default manager.
-    published = PublishedManager()
-
-    tags = TaggableManager()
 
     def get_comments(self):
         return self.comments.filter(parent=None).filter(active=True)
@@ -53,10 +36,9 @@ class BlogComment(models.Model):
     active = models.BooleanField(default=False)
     parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
 
     def __str__(self):
         return self.name
