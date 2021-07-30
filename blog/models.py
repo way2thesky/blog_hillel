@@ -1,9 +1,19 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='publish')
+
+
 class Blog(models.Model):
+    STATUS_CHOICES = (
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    )
     title = models.CharField(max_length=200)
     short_description = models.CharField(max_length=250, unique_for_date='publish')
 
@@ -15,6 +25,9 @@ class Blog(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=5)
     posted = models.BooleanField(default=False)
     publish = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=10,
+                              choices=STATUS_CHOICES,
+                              default='draft')
 
     class Meta:
         ordering = ['-publish']
@@ -22,8 +35,14 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+    objects = models.Manager()
+    published = PublishedManager()
+
     def get_comments(self):
         return self.comments.filter(parent=None).filter(active=True)
+
+    def get_absolute_url(self):
+        return reverse('blog:post-detail', args=[str(self.id)])
 
 
 class Comment(models.Model):

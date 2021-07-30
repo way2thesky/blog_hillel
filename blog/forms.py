@@ -9,6 +9,7 @@ from .models import Comment
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField()
+    captcha = CaptchaField()
 
     class Meta:
         model = User
@@ -16,6 +17,8 @@ class RegisterForm(UserCreationForm):
 
 
 class CommentForm(forms.ModelForm):
+    captcha = CaptchaField()
+
     class Meta:
         model = Comment
         fields = ('name', 'email', 'text')
@@ -32,3 +35,10 @@ class ContactForm(forms.Form):
     content = forms.CharField(label='Text', widget=forms.Textarea(attrs={'class': 'form-control', "rows": 5}))
     email = forms.EmailField(required=True)
     captcha = CaptchaField()
+
+
+class EmailBlogForm(forms.Form):
+    name = forms.CharField(label='Name', max_length=25)
+    email = forms.EmailField(required=True)
+    to = forms.EmailField(required=True)
+    comments = forms.CharField(label='Text', widget=forms.Textarea(attrs={'class': 'form-control', "rows": 5}))

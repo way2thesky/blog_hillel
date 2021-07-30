@@ -1,9 +1,6 @@
-
-
 from blog import models
-from blog.forms import CommentForm, ContactForm, RegisterForm
+from blog.forms import CommentForm, ContactForm, EmailBlogForm, RegisterForm
 from blog.models import Blog, Comment
-
 
 from django.conf import settings
 from django.contrib import messages
@@ -40,11 +37,9 @@ class RegisterFormView(SuccessMessageMixin, FormView):
         password = self.request.POST['password1']
         user = authenticate(username=username, password=password)
         login(self.request, user)
-        subject = 'Welcome to my BLOG'
-        message = f'Hi {username}, thank you for registering in my Blog.'
-        from_email = settings.EMAIL_HOST_USER
-        recipient_list = [user.email, ]
-        send_mail(subject, message, from_email, recipient_list)
+        send_mail(subject='Welcome to my BLOG', message=f'Hi {username}, thank you for registering in my Blog.',
+                  from_email=settings.EMAIL_HOST_USER, recipient_list=['random@example.com'], fail_silently=True)
+
         return super(RegisterFormView, self).form_valid(form)
 
 
@@ -62,7 +57,7 @@ class UpdateProfile(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return user
 
 
-class PostCreate(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Blog
     fields = ['title', 'short_description', 'image', 'full_description', 'posted']
     template_name = 'post_create.html'
@@ -73,13 +68,11 @@ class PostCreate(LoginRequiredMixin, CreateView):
         post = form.save(commit=False)
         post.user = self.request.user
         post.save()
-        if form.is_valid():
-            subject = 'New post'
-            message = f'New {post} created! Check it on admin panel.'
-            from_email = settings.EMAIL_HOST_USER
-            recipient_list = [post.title, ]
-            send_mail(subject, message, from_email, recipient_list)
 
+        send_mail(subject='New post', message=f'New {post} created! Check it on admin panel.',
+                  from_email=settings.EMAIL_HOST_USER,
+                  recipient_list=['random@example.com'],
+                  fail_silently=True)
         self.object = post
         return HttpResponseRedirect(self.get_success_url())
 
@@ -126,6 +119,7 @@ def post_detail(request, pk):
         if comment_form.is_valid():
             mail = send_mail(comment_form.cleaned_data['name'], comment_form.cleaned_data['email'], 'yii2_loc@ukr.net',
                              ['matroskin978@gmail.com'], fail_silently=True)
+
             if mail:
                 messages.success(request, 'Successful! Sent')
             new_comment = comment_form.save(commit=False)
@@ -207,3 +201,26 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'contact_form.html', {"form": form})
+
+
+def post_share(request, post_id):
+    post = get_object_or_404(Blog, id=post_id)
+    sent = False
+
+    if request.method == 'POST':
+
+        form = EmailBlogForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            subject = f"{cd['name']} recommends you read {post.title}"
+            message = f"Read {post.title} at {post_url}\n\n" \
+                      f"{cd['name']}\'s comments: {cd['comments']}"
+            send_mail(subject, message, 'admin@myblog.com', [cd['to']])
+            sent = True
+
+    else:
+        form = EmailBlogForm()
+    return render(request, 'post_share.html', {'post': post,
+                                               'form': form,
+                                               'sent': sent})
