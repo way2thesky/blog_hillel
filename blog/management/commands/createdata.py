@@ -12,8 +12,8 @@ from faker.generator import random
 UserModel = get_user_model()
 fake = Faker(['en_US'])
 
-post_num = 50
-comments_num = 1500
+post_num = 1000
+comments_num = 2500
 
 
 class Command(BaseCommand):
@@ -49,7 +49,7 @@ class Command(BaseCommand):
             email=fake.email(),
             post_id=random.choice(post_ids),
             text=fake.paragraph(nb_sentences=1),
-            # parent_id=random.randint(1, 10),
+            parent_id=random.randint(1, 10),
             created=datetime.date.today(),
 
             active=random.choice([True, False]))
