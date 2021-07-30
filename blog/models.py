@@ -6,14 +6,11 @@ from django.utils import timezone
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(status='publish')
+        return super().get_queryset()
 
 
 class Blog(models.Model):
-    STATUS_CHOICES = (
-        ('draft', 'Draft'),
-        ('published', 'Published'),
-    )
+
     title = models.CharField(max_length=200)
     short_description = models.CharField(max_length=250, unique_for_date='publish')
 
@@ -25,9 +22,6 @@ class Blog(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=5)
     posted = models.BooleanField(default=False)
     publish = models.DateTimeField(default=timezone.now)
-    status = models.CharField(max_length=10,
-                              choices=STATUS_CHOICES,
-                              default='draft')
 
     class Meta:
         ordering = ['-publish']
