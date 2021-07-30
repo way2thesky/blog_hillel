@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 
 class PublishedManager(models.Manager):
@@ -10,7 +11,6 @@ class PublishedManager(models.Manager):
 
 
 class Blog(models.Model):
-
     title = models.CharField(max_length=200)
     short_description = models.CharField(max_length=250, unique_for_date='publish')
 
@@ -31,6 +31,7 @@ class Blog(models.Model):
 
     objects = models.Manager()
     published = PublishedManager()
+    ags = TaggableManager()
 
     def get_comments(self):
         return self.comments.filter(parent=None).filter(active=True)
