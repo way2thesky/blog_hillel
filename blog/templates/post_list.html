@@ -6,8 +6,8 @@
 {#    <strong>Average rating{{ average.rating}}</strong>#}
     <ul>
         {% for post in page_obj %}
-        <figure>
-            <img src="{% if post.image %}{{ post.image }}{% else %}{% endif %}" class="img-thumbnail" alt="...">
+        <figure><a href="{% url 'blog:post-detail' post.id %}">
+            <img src="{% if post.image %}{{ post.image }}{% else %}{% endif %}" class="img-thumbnail" alt="..."></a>
         </figure>
             <h2 class="card-title h5">
                 Post Title: {{ post.title }}

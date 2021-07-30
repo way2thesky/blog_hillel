@@ -21,7 +21,8 @@
     <h5>Short description: {{ post.short_description }} </h5>
 
         <figure>
-            <img src="{% if post.image %}{{ post.image.url }}{% else %}{% endif %}" class="rounded" alt="">
+            <a href="{% url 'blog:post-detail' post.id %}">
+                <img src="{% if post.image %}{{ post.image }}{% else %}{% endif %}" class="rounded" alt=""> </a>
         </figure>
 
     {% empty %}
