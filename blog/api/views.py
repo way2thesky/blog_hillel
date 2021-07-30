@@ -1,11 +1,14 @@
-from .serializers import BlogListSerializer, UserSerializer
-from rest_framework.response import Response
-from ..models import Blog
-from rest_framework.views import APIView
 from django.contrib.auth.models import User
+
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from .serializers import BlogListSerializer, UserSerializer
+from ..models import Blog
 
 
 class RegisterUser(APIView):
@@ -52,7 +55,7 @@ class PostAPIView(APIView):
             serializer.save()
 
             return Response({"status": 200, "payload ": serializer.data, "msg": "patched successfully"})
-        except Exception as e:
+        except Exception as e:  # noqa F841
             return Response({"status": 403, 'msg': "invalid id"})
 
     def delete(self, request):

@@ -1,7 +1,10 @@
 from blog.models import Blog, Comment
-from rest_framework import serializers
-from taggit_serializer.serializers import (TagListSerializerField, TaggitSerializer)
+
 from django.contrib.auth.models import User
+
+from rest_framework import serializers
+
+from taggit_serializer.serializers import (TagListSerializerField, TaggitSerializer)
 
 
 class UserSerializer(serializers.ModelSerializer):
