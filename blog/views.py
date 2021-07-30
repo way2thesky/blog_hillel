@@ -1,4 +1,3 @@
-from blog import models
 from blog.forms import CommentForm, ContactForm, EmailBlogForm, RegisterForm
 from blog.models import Blog, Comment
 
@@ -8,7 +7,6 @@ from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
-from django.db.models import Avg
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
