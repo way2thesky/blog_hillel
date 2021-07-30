@@ -103,9 +103,9 @@ class PostListView(generic.ListView):
         return Blog.objects.all().filter(posted=True)
 
 
-def current_average():
-    average = models.Blog.objects.aggregate(average=Avg('rating'))
-    return average
+# def current_average():
+#     average = models.Blog.objects.aggregate(average=Avg('rating'))
+#     return average
 
 
 def post_detail(request, pk):
