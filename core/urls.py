@@ -1,5 +1,4 @@
 """core URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:
@@ -22,10 +21,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
 
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
@@ -33,19 +29,13 @@ urlpatterns = [
 urlpatterns += [
     path('', RedirectView.as_view(url='/blog/', permanent=True)),
     path('blog/', include('blog.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('captcha/', include('captcha.urls')),
-
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/v1/', include("blog.api.urls", namespace="blog_api")),
-
 ]
+
 urlpatterns += [
-                   path('accounts/', include('django.contrib.auth.urls')),
-                   path("accounts/register/", RegisterFormView.as_view(), name="register"),
-                   path('accounts/update-profile/', UpdateProfile.as_view(), name='update-profile'),
-               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('accounts/', include('django.contrib.auth.urls')),
+    path("accounts/register/", RegisterFormView.as_view(), name="register"),
+    path('accounts/update-profile/', UpdateProfile.as_view(), name='update-profile'),
+]
 
 if settings.DEBUG:
     import debug_toolbar

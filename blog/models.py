@@ -3,8 +3,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from taggit.managers import TaggableManager
-
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -32,7 +30,6 @@ class Blog(models.Model):
 
     objects = models.Manager()
     published = PublishedManager()
-    ags = TaggableManager()
 
     def get_comments(self):
         return self.comments.filter(parent=None).filter(active=True)

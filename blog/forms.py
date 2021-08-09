@@ -1,5 +1,3 @@
-from captcha.fields import CaptchaField
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -9,7 +7,6 @@ from .models import Comment
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField()
-    captcha = CaptchaField()
 
     class Meta:
         model = User
@@ -17,8 +14,6 @@ class RegisterForm(UserCreationForm):
 
 
 class CommentForm(forms.ModelForm):
-    captcha = CaptchaField()
-
     class Meta:
         model = Comment
         fields = ('name', 'email', 'text')

@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Blog, Comment
 
 
-def make_moderated(modeladmin, request, queryset):
+def make_moderated(queryset):
     queryset.update(moderated=True)
 
 

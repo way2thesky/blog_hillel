@@ -71,7 +71,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
         send_mail(subject='New post', message=f'New {post} created! Check it on admin panel.',
                   from_email=settings.EMAIL_HOST_USER,
-                  recipient_list=['random@example.com'],
+                  recipient_list=['admin@example.com'],
                   fail_silently=True)
         self.object = post
         return HttpResponseRedirect(self.get_success_url())
@@ -101,11 +101,6 @@ class PostListView(generic.ListView):
 
     def get_queryset(self):
         return Blog.objects.all().filter(posted=True)
-
-
-# def current_average():
-#     average = models.Blog.objects.aggregate(average=Avg('rating'))
-#     return average
 
 
 def post_detail(request, pk):
