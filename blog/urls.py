@@ -1,8 +1,6 @@
 from django.urls import path
 
 from . import views
-from .views import contact
-
 
 app_name = 'blog'
 
@@ -20,6 +18,7 @@ urlpatterns = [
     path('user/<int:pk>', views.UserDetailView.as_view(), name='user-detail'),
 
     path('comment/reply/', views.reply_page, name="reply"),
-    path('contact/', contact, name='contact'),
+    path('contact/', views.contact_form, name='contact'),
+
     path('<int:post_id>/share/', views.post_share, name='post_share'),
 ]

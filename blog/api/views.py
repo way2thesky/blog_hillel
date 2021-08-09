@@ -54,9 +54,9 @@ class PostAPIView(APIView):
                 return Response({'status': 403, 'errors': serializer.errors, 'message': 'Something went wrong'})
             serializer.save()
 
-            return Response({"status": 200, "payload ": serializer.data, "msg": "patched successfully"})
+            return Response({"status": 200, "payload ": serializer.data, "message": "patched successfully"})
         except Exception as e:  # noqa F841
-            return Response({"status": 403, 'msg': "invalid id"})
+            return Response({"status": 403, 'message': "invalid id"})
 
     def delete(self, request):
         pass

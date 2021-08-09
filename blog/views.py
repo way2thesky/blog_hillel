@@ -1,5 +1,6 @@
 from blog.forms import CommentForm, ContactForm, EmailBlogForm, RegisterForm
 from blog.models import Blog, Comment
+from blog.tasks import contact_us
 
 from django.conf import settings
 from django.contrib import messages
@@ -7,8 +8,9 @@ from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -183,22 +185,30 @@ def reply_page(request):
     return redirect("/")
 
 
-def contact(request):
-    if request.method == 'POST':
+def contact_form(request):
+    data = dict()
+    if request.method == "GET":
+        form = ContactForm()
+    else:
         form = ContactForm(request.POST)
         if form.is_valid():
-            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'admin@example.com',
-                             ['matroskin@gmail.com'], fail_silently=True)
-            if mail:
-                messages.success(request, 'Successful! Sent')
-                return redirect('blog:index')
-            else:
-                messages.error(request, 'Some Errors')
+            subject = form.cleaned_data['subject']
+            from_email = form.cleaned_data['from_email']
+            message = form.cleaned_data['message']
+            data['form_is_valid'] = True
+            contact_us.delay(subject, message, from_email)
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 'Message sent - SUCCESS')
         else:
-            messages.error(request, 'Some Error with validation')
-    else:
-        form = ContactForm()
-    return render(request, 'contact_form.html', {"form": form})
+            data['form_is_valid'] = False
+    context = {'form': form}
+    data['html_form'] = render_to_string(
+        template_name='includes/contact.html',
+        context=context,
+        request=request
+    )
+    return JsonResponse(data)
 
 
 def post_share(request, post_id):

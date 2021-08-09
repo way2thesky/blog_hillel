@@ -2,8 +2,9 @@
 
 {% block content %}
 
-    <h3>Blogs:</h3>
-{#    <strong>Average rating{{ average.rating}}</strong>#}
+<div class="d-flex justify-content-center align-items-center" style="height:100px;">
+    <div class="bg-primary"></div>
+</div>
     <ul>
         {% for post in page_obj %}
         <figure><a href="{% url 'blog:post-detail' post.id %}">
@@ -31,5 +32,6 @@
             <li>No blogs yet.</li>
         {% endfor %}
     </ul>
-{% include "pagination.html" with page=posts %}
+
+{% include "includes/pagination.html" with page=posts %}
 {% endblock %}

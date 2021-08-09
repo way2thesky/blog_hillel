@@ -32,9 +32,8 @@ class CommentForm(forms.ModelForm):
 
 class ContactForm(forms.Form):
     subject = forms.CharField(label='Subject', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    content = forms.CharField(label='Text', widget=forms.Textarea(attrs={'class': 'form-control', "rows": 5}))
-    email = forms.EmailField(required=True)
-    captcha = CaptchaField()
+    message = forms.CharField(label='Text', widget=forms.Textarea(attrs={'class': 'form-control', "rows": 5}))
+    from_email = forms.EmailField(required=True)
 
 
 class EmailBlogForm(forms.Form):
