@@ -3,7 +3,7 @@ from blog.models import Blog, Comment
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from . import serializers
 from .pagination import PostLimitOffsetPagination
@@ -14,7 +14,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
     pagination_class = PostLimitOffsetPagination
-
     permission_classes = [IsAuthenticated]
 
 # class UserDetail(generics.RetrieveAPIView):

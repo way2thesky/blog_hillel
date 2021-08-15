@@ -24,6 +24,9 @@ from django.views.generic import RedirectView
 
 from rest_framework.routers import DefaultRouter
 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'posts', views.BlogViewSet)
@@ -44,15 +47,10 @@ urlpatterns += [
 
 urlpatterns += [
     path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/token/', TokenObtainPairView.as_view()),
+    path('api/token/refresh/', TokenRefreshView.as_view()),
 ]
-
-urlpatterns += [
-    url(r'^auth/', include('djoser.urls')),
-    url(r'^auth/', include('djoser.urls.jwt')),
-    path('api-auth/', include('rest_framework.urls'))
-
-]
-
 if settings.DEBUG:
     import debug_toolbar
 
