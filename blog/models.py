@@ -1,7 +1,10 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+
+User = get_user_model()
 
 
 class PublishedManager(models.Manager):
@@ -15,7 +18,7 @@ class Blog(models.Model):
 
     image = models.ImageField(blank=True, null=True)
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE, null=True)
 
     full_description = models.TextField(blank=True)
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=5)
@@ -43,7 +46,7 @@ class Comment(models.Model):
     email = models.EmailField()
 
     post = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="comments")
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     text = models.TextField()
     active = models.BooleanField(default=False)
     parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)

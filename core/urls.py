@@ -12,6 +12,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from blog.api import views
 from blog.views import RegisterFormView, UpdateProfile
 
 from django.conf import settings
@@ -21,20 +22,35 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
 
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'posts', views.BlogViewSet)
+router.register(r'comments', views.CommentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
-# Hillel_Blog
-urlpatterns += [
     path('', RedirectView.as_view(url='/blog/', permanent=True)),
     path('blog/', include('blog.urls')),
+
 ]
 
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
     path("accounts/register/", RegisterFormView.as_view(), name="register"),
     path('accounts/update-profile/', UpdateProfile.as_view(), name='update-profile'),
+]
+
+urlpatterns += [
+    path('api/', include(router.urls)),
+]
+
+urlpatterns += [
+    url(r'^auth/', include('djoser.urls')),
+    url(r'^auth/', include('djoser.urls.jwt')),
+    path('api-auth/', include('rest_framework.urls'))
+
 ]
 
 if settings.DEBUG:

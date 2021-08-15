@@ -105,18 +105,13 @@ class PostListView(generic.ListView):
 
 def post_detail(request, pk):
     post = get_object_or_404(Blog, pk=pk, posted=True)
-
     comments = post.comments.filter(active=True)
-    new_comment = None
 
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            mail = send_mail(comment_form.cleaned_data['name'], comment_form.cleaned_data['email'], 'yii2_loc@ukr.net',
-                             ['matroskin978@gmail.com'], fail_silently=True)
 
-            if mail:
-                messages.success(request, 'Successful! Sent')
+        if comment_form.is_valid():
+            messages.success(request, 'Successful! Sent')
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
             new_comment.save()
@@ -164,7 +159,7 @@ def reply_page(request):
             post_id = request.POST.get('post_id')  # from hidden input
             parent_id = request.POST.get('parent')  # from hidden input
             post_url = request.POST.get('post_url')  # from hidden input
-
+            messages.success(request, 'Successful! Sent')
             print(post_id)  # noqa T001
             print(parent_id)  # noqa T001
             print(post_url)  # noqa T001
