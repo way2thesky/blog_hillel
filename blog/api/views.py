@@ -16,10 +16,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = PostLimitOffsetPagination
     permission_classes = [IsAuthenticated]
 
-# class UserDetail(generics.RetrieveAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = serializers.UserSerializer
-
 
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
@@ -29,12 +25,6 @@ class BlogViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-# class BlogDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Blog.objects.all()
-#     serializer_class = BlogDetailSerializer
-#     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -47,9 +37,3 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-# class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Comment.objects.all()
-#     serializer_class = serializers.CommentSerializer
-#     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-#
-#     lookup_fields = ["parent", "id"]
