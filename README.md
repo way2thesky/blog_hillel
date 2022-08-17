@@ -4,7 +4,7 @@
 ## Technology Stack:
 JQuery, AJAX, Docker, DRF, Nginx, PostgreSQL, Redis, Rabbitmq, Celery
 
-## Этот проект включает:!!
+## Этот проект включает:!!!
 
 * Регистрация!
 * Функции CRUD (создание или убирать их в заготовки, чтение, обновление, удаление)
