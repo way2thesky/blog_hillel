@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<ul>
+{% for user in page_obj %}
+    <h4>User: <a href="{% url 'blog:user-detail' user.pk %}">{{ user.username }} </a> </h4>
+{% empty %}
+    <li>No users yet.</li>
+{% endfor %}
+</ul>
+{% include "blog_hillel/includes/pagination.html" with page=posts %}
+{% endblock %}

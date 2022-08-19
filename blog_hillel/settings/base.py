@@ -47,6 +47,26 @@ INSTALLED_APPS: List[str] = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
 
+    'django_celery_results',
+    'django_extensions',
+    'widget_tweaks',
+
+    # blog_hillel
+    "blog_hillel.apps.articles",
+
+    # API
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'rest_framework_simplejwt',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+
+
+
 ]
 
 MIDDLEWARE: List[str] = [
