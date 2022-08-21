@@ -2,7 +2,7 @@
 .. README.rst
 
 
-Celebrities Stand Up for Ukraine documentation
+Simple Blog documentation
 ==============================================
 
 
@@ -11,9 +11,7 @@ Celebrities Stand Up for Ukraine documentation
 Description
 -----------
 
-24.02 AT 5:00 AM THE WAR BEGAN IN UKRAINE
-
-the Project is all about Celebrities and World Leaders Stand Up for Ukraine
+Simple Blog Project from my courses in school Hillel
 
 Local development third-party services
 --------------------------------------
