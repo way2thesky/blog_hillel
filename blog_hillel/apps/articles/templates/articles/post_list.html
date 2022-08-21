@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center" style="height:100px;">
+    <div class="bg-primary"></div>
+</div>
+    <ul>
+        {% for post in posts %}
+        <figure><a href="{% url 'blog:post-detail' post.id %}">
+            <img src="{{ post.image.url }}" class="Article-imageSrc" alt="{{ post.title }}"></a>
+        </figure>
+
+
+            <h2 class="card-title h5">
+                Post Title: {{ post.title }}
+            </h2>
+            <h5>Short description: {{ post.short_description }} </h5>
+
+
+
+            <div class="text-muted">
+                <small>Rating {{ post.rating }}
+                    Published {{ post.publish.date }} by <strong>{{ post.user }}</strong>
+                </small>
+
+            <h5>Author: <a href="{% url 'users:user-detail' post.user.id %}" >{{ post.user }}</a></h5>
+            </div>
+            <div>
+                <a href="{% url 'blog:post-detail' post.id %} " class="btn btn-primary btn-sm">Read more</a>
+
+            </div>
+        {% empty %}
+            <li>No blogs yet.</li>
+        {% endfor %}
+    </ul>
+
+{% include "blog_hillel/includes/pagination.html" with page=posts %}
+{% endblock %}
