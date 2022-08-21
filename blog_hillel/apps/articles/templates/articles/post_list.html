@@ -6,10 +6,12 @@
     <div class="bg-primary"></div>
 </div>
     <ul>
-        {% for post in page_obj %}
+        {% for post in posts %}
         <figure><a href="{% url 'blog:post-detail' post.id %}">
-            <img src="{% if post.image %}{{ post.image }}{% else %}{% endif %}" class="img-thumbnail" alt="..."></a>
+            <img src="{{ post.image.url }}" class="Article-imageSrc" alt="{{ post.title }}"></a>
         </figure>
+
+
             <h2 class="card-title h5">
                 Post Title: {{ post.title }}
             </h2>
@@ -22,7 +24,7 @@
                     Published {{ post.publish.date }} by <strong>{{ post.user }}</strong>
                 </small>
 
-            <h5>Author: <a href="{% url 'blog:user-detail' post.user.id %}" >{{ post.user }}</a></h5>
+            <h5>Author: <a href="{% url 'users:user-detail' post.user.id %}" >{{ post.user }}</a></h5>
             </div>
             <div>
                 <a href="{% url 'blog:post-detail' post.id %} " class="btn btn-primary btn-sm">Read more</a>

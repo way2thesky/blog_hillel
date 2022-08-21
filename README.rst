@@ -1,4 +1,4 @@
-.. celebrities_stand_up_for_ukraine
+.. blog_hillel
 .. README.rst
 
 

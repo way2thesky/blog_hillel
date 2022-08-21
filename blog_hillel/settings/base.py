@@ -46,27 +46,21 @@ INSTALLED_APPS: List[str] = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-
-    'django_celery_results',
-    'django_extensions',
-    'widget_tweaks',
-
+    "django_celery_results",
+    "django_extensions",
+    "widget_tweaks",
     # blog_hillel
     "blog_hillel.apps.articles",
-
+    "blog_hillel.apps.users",
     # API
-    'rest_framework',
-    'rest_framework.authtoken',
-    'dj_rest_auth',
-    'rest_framework_simplejwt',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth.registration',
-
-
-
+    "rest_framework",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
+    "rest_framework_simplejwt",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "dj_rest_auth.registration",
 ]
 
 MIDDLEWARE: List[str] = [
@@ -84,7 +78,7 @@ APPEND_SLASH: bool = True
 TEMPLATES: List[Dict[str, Any]] = [  # noqa: ECE001
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(os.path.join(BASE_DIR, NAME, "templates"))],
+        "DIRS": [str(pathlib.Path(BASE_DIR).joinpath(NAME, "templates"))],
         "APP_DIRS": False,
         "OPTIONS": {
             "context_processors": [
@@ -120,7 +114,6 @@ USE_L10N: bool = True
 USE_TZ: bool = True
 USE_THOUSAND_SEPARATOR: bool = True
 
-
 # static/media settings
 MEDIA_ROOT: str = str(pathlib.Path(BASE_DIR).joinpath("media"))
 STATIC_ROOT: str = str(pathlib.Path(BASE_DIR).joinpath("static"))
@@ -149,3 +142,6 @@ AUTHENTICATION_BACKENDS: List[str] = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+LOGIN_REDIRECT_URL = "/"
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+ROOT_URLCONF = "blog_hillel.urls"

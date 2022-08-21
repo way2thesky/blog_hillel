@@ -1,4 +1,4 @@
-# blog_hillel/apps/articles/views/__init__.py
+# blog_hillel/apps/users/views/__init__.py
 
 
 from typing import List
